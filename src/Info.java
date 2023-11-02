@@ -4,16 +4,20 @@ import java.util.Scanner;
 public class Info {
     boolean isVip;
     String phone;
-    File file = new File("callers.txt");
+    static Scanner scanner;
 
-    public static void EnterData() {
-    }
+    public Info() throws FileNotFoundException {
+        if (scanner == null){
+        File file = new File("callers.txt");
+        scanner = new Scanner(file);
+    }}
 
     void enterData() throws FileNotFoundException {
-        Scanner scanner = new Scanner(file);
         isVip = scanner.nextBoolean();
         phone = scanner.next();
-        scanner.close();
+        scanner.nextLine();
     }
-
-}
+    public String toString() {
+        // Return a meaningful representation of the Info object
+        return "Info: " + isVip + " " + phone;
+}}

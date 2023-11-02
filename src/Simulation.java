@@ -1,43 +1,61 @@
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Deque;
 import java.util.ArrayDeque;
-import java.util.Iterator;
+import java.util.Scanner;
+
 public class Simulation {
-    int lastVip=-1;
+    int lastVip = -1;
+    String comment;
     Deque<Info> eile = new ArrayDeque<>();
-    boolean CheckVip(Info eile){
+
+    boolean CheckVip(Info eile) {
         return eile.isVip;
     }
-    void generate (Info client, int lastVip){
-        client.EnterData();
-    if (CheckVip(client) && lastVip==-1){
-        eile.addFirst(client);
-        lastVip=0;
-    }
-    else if (CheckVip(client)) {
-        Iterator<Info> iterator = eile.iterator();
-        iterator = eile.iterator();
-        for (int i = 0; i < lastVip; i++) {
-            iterator.next();
+
+    void generate(Info client) throws FileNotFoundException {
+        client.enterData();
+        if (CheckVip(client)) {
+            if (lastVip == -1) {
+                eile.addFirst(client);
+                lastVip = 0;
+            }
+            else {
+
+                Deque<Info> tempDeque = new ArrayDeque<>();
+                for (int i = 0; i <= lastVip ; i++) {
+                    tempDeque.addFirst(eile.pollFirst());
+                }
+                tempDeque.addFirst(client);
+                int size = tempDeque.size();
+                for (int i = 0; i < size; i++)
+                {
+                    eile.addFirst(tempDeque.pollFirst());
+                }
+                lastVip++;
+        } }
+            else {
+            eile.addLast(client);
         }
-        iterator.add(client);
-        lastVip++;
     }
-    else {
-        eile.addLast(client); // Add standard callers to the end of the line
+
+
+
+
+    void serve(Info client) throws IOException {
+
+        System.out.println("Nurodykite komentarus/priezasti del skambucio: ");
+        Scanner scanner = new Scanner(System.in);
+        comment = scanner.nextLine();
+        eile.removeFirst();
+
     }
-    }
-    void serve(Info client, int lastVip){
-        if (CheckVip(client) && lastVip==0){
-            eile.removeFirst();
-            lastVip=-1;
-        }
-        else if (CheckVip(client)){
-            eile.remove(lastVip);
-            lastVip--;
-        }
-        else{
-            eile.removeFirst();
+
+    void printQueue() {
+        System.out.println("Current Queue:");
+        for (Info client : eile) {
+            System.out.println(client.toString());
         }
     }
 }
