@@ -16,6 +16,8 @@ public class Info {
         isVip = scanner.nextBoolean();
         phone = scanner.next();
         scanner.nextLine();
+        if (scanner.hasNextLine() == false)
+            System.out.println("No more callers");
     }
     public String toString() {
         // Return a meaningful representation of the Info object
