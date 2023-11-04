@@ -1,14 +1,95 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
+    private static ScheduledExecutorService scheduler;
+    private static Simulation simulation = new Simulation();
     public static void main(String[] args) throws IOException {
-        Simulation simulation = new Simulation();
-        for (int i=0; i<14; i++)
-        {
-         simulation.generate(new Info());
-        }
+        Scanner scanner = new Scanner(System.in);
+            scheduler = Executors.newScheduledThreadPool(1);
+       {
+            System.out.println("Choose an option:");
+            System.out.println("1. Start the program");
+            System.out.println("2. Exit");
 
-        simulation.printQueue();
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    generateClients();
+                    startProgram();
+                    break;
+                case "2":
+                    System.out.println("Exiting the program. Goodbye!");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please select 1 or 2.");
+            }
+        }
+    }
+
+    public static void startProgram() throws IOException {
+        System.out.println("Choose an option:");
+        System.out.println("1. Stop generating clients");
+        System.out.println("2. Answer the call");
+        System.out.println("3. View the queue/queues");
+        System.out.println("4. Exit");
+        Scanner scanner = new Scanner(System.in);
+        while(true) {
+           String choice = scanner.nextLine();
+            switch (choice) {
+
+                case "1":
+                    if (!scheduler.isShutdown())
+                    {
+                        scheduler.shutdown();
+                        System.out.println("Stopped the client generation.");
+                    }
+                    else
+                    {
+                        System.out.println("Clients are not being generated.");
+                    }
+                    break;
+                case "2":
+                    System.out.println("The call has been answered.");
+                    System.out.println();
+                    System.out.println("To end the call press 1.");
+                    String choice2 = scanner.nextLine();
+                    simulation.serve();
+                    System.out.println("Choose an option:");
+                    System.out.println("1. Stop generating clients");
+                    System.out.println("2. Answer the call");
+                    System.out.println("3. View the queue/queues");
+                    System.out.println("4. Exit");
+                    System.out.println();
+                    break;
+                case "3":
+                    simulation.printQueue();
+                    System.out.println("Choose an option:");
+                    System.out.println("1. Stop generating clients");
+                    System.out.println("2. Answer the call");
+                    System.out.println("3. View the queue/queues");
+                    System.out.println("4. Exit");
+                    break;
+                case "4":
+                    System.out.println("Exiting the program. Goodbye!");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please select 1, 2, 3 or 4.");
+            }
+        }
+    }
+    public static void  generateClients() throws IOException {
+        Runnable commandTask = () -> {
+            try {
+                simulation.generate();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        };
+        scheduler.scheduleAtFixedRate(commandTask, 0, 5, TimeUnit.SECONDS);
     }
 }
