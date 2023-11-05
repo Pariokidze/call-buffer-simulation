@@ -33,7 +33,10 @@ public class Info {
     }
     @Override
     public String toString() {
-        return "Caller " + phone;
+        if (isVip)
+        return "VIP Caller " + phone;
+        else
+        return "Standard Caller " + phone;
     }
         public boolean isVip() {
             return isVip;

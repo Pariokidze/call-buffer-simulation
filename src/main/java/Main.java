@@ -32,10 +32,10 @@ public class Main {
         }
     }
 
-    public static void startProgram()  {
+    public static void startProgram() throws IOException {
         System.out.println("Choose an option:");
         System.out.println("1. Stop generating clients");
-        System.out.println("2. Answer the call");
+        System.out.println("2. Answer the call in all available queues");
         System.out.println("3. View the queue/queues");
         System.out.println("4. Exit");
         Scanner scanner = new Scanner(System.in);
@@ -63,7 +63,7 @@ public class Main {
                     simulation.serve();
                     System.out.println("Choose an option:");
                     System.out.println("1. Stop generating clients");
-                    System.out.println("2. Answer the call");
+                    System.out.println("2. Answer the call in all available queues");
                     System.out.println("3. View the queue/queues");
                     System.out.println("4. Exit");
                     Answered = false;
@@ -71,15 +71,21 @@ public class Main {
                     break;
                 case "3":
                     simulation.printQueue();
+                    Answered = true;
+                    System.out.println("If you're done viewing the queue/queues press 1.");
+                    choice2 = scanner.nextLine();
                     System.out.println("Choose an option:");
                     System.out.println("1. Stop generating clients");
-                    System.out.println("2. Answer the call");
+                    System.out.println("2. Answer the call in all available queues");
                     System.out.println("3. View the queue/queues");
                     System.out.println("4. Exit");
+                    Answered = false;
                     break;
                 case "4":
                     System.out.println("Exiting the program. Goodbye!");
                     System.exit(0);
+                    break;
+
                 default:
                     System.out.println("Invalid choice. Please select 1, 2, 3 or 4.");
             }
@@ -87,13 +93,13 @@ public class Main {
     }
     public static void  generateClients() {
         Runnable commandTask = () -> {
-            if (!Answered) {
-                try {
-                    simulation.generate();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+            if (!Answered)
+            try {
+                simulation.generate();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
+
         };
         scheduler.scheduleAtFixedRate(commandTask, 0, 5, TimeUnit.SECONDS);
     }
