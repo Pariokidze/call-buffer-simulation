@@ -29,11 +29,15 @@ public class Simulation {
             SecondQueue = true;
         if ((CheckVip(client) && eile.size() < 10 && !SecondQueue) || (CheckVip(client)) && eile.isEmpty())  // 1 eile
         { // {
+                System.out.println();
+                System.out.println("New VIP client added to the first queue: " + client.toString());
                 eile.addFirst(client);
                 lastVip++;
         }
         else if (eile.size() < 10 && !SecondQueue) // 1 eile
         {
+            System.out.println();
+            System.out.println("New standard client added to the first queue: " + client.toString());
             eile.addLast(client);
         }
         else if (eile.size() == 10 & lastVip>0 && SecondQueue) {  // 2 eile
@@ -57,11 +61,15 @@ public class Simulation {
 
             if (CheckVip(client) && eile2.size() < 10)
             {
+                System.out.println();
+                System.out.println("New VIP client added to the second queue: " + client.toString());
                     eile2.addFirst(client);
                     lastVip2++;
             }
             else
             {
+                System.out.println();
+                System.out.println("New standard client added to the second queue: " + client.toString());
                 eile2.addLast(client);
             }
     x++;
@@ -91,10 +99,8 @@ public class Simulation {
         if (eile2.isEmpty()) {
             SecondQueue = false;
         }
-        System.out.println(servedCallers);
         try {
             objectMapper.writeValue(jsonFile, servedCallers);
-            System.out.println("Data has been written to " + jsonFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }

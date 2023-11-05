@@ -32,9 +32,34 @@ public class Info {
         }
         return null;
     }
+    @Override
+    public String toString() {
+        return "Caller " + phone;
+    }
+        public boolean isVip() {
+            return isVip;
+        }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+        public void setVip(boolean vip) {
+            isVip = vip;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
     }
 
-}
+
+

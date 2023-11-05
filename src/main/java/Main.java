@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
+    private static Boolean Answered = false;
     private static ScheduledExecutorService scheduler;
     private static Simulation simulation = new Simulation();
     public static void main(String[] args) throws IOException {
@@ -55,6 +56,7 @@ public class Main {
                     break;
                 case "2":
                     System.out.println("The call has been answered.");
+                    Answered = true;
                     System.out.println();
                     System.out.println("To end the call press 1.");
                     String choice2 = scanner.nextLine();
@@ -64,6 +66,7 @@ public class Main {
                     System.out.println("2. Answer the call");
                     System.out.println("3. View the queue/queues");
                     System.out.println("4. Exit");
+                    Answered = false;
                     System.out.println();
                     break;
                 case "3":
@@ -76,7 +79,7 @@ public class Main {
                     break;
                 case "4":
                     System.out.println("Exiting the program. Goodbye!");
-                    return;
+                    System.exit(0);
                 default:
                     System.out.println("Invalid choice. Please select 1, 2, 3 or 4.");
             }
@@ -84,10 +87,12 @@ public class Main {
     }
     public static void  generateClients() throws IOException {
         Runnable commandTask = () -> {
-            try {
-                simulation.generate();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (!Answered) {
+                try {
+                    simulation.generate();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         };
         scheduler.scheduleAtFixedRate(commandTask, 0, 5, TimeUnit.SECONDS);
