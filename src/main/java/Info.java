@@ -28,9 +28,8 @@ public class Info {
             List<Info> clients = objectMapper.readValue(new File("callers.json"), objectMapper.getTypeFactory().constructCollectionType(List.class, Info.class));
             return clients;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
     @Override
     public String toString() {

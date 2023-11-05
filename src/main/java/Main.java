@@ -32,7 +32,7 @@ public class Main {
         }
     }
 
-    public static void startProgram() throws IOException {
+    public static void startProgram()  {
         System.out.println("Choose an option:");
         System.out.println("1. Stop generating clients");
         System.out.println("2. Answer the call");
@@ -85,7 +85,7 @@ public class Main {
             }
         }
     }
-    public static void  generateClients() throws IOException {
+    public static void  generateClients() {
         Runnable commandTask = () -> {
             if (!Answered) {
                 try {

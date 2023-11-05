@@ -11,7 +11,7 @@ public class Simulation {
     boolean ThirdQueue = false;
     int x=0;
     int lastVip3 = -1;
-    String comment;
+
     List<Info> servedCallers = new ArrayList<>();
     Deque<Info> eile = new ArrayDeque<>();
     Deque<Info> eile2 = new ArrayDeque<>();
@@ -30,14 +30,14 @@ public class Simulation {
         if ((CheckVip(client) && eile.size() < 10 && !SecondQueue) || (CheckVip(client)) && eile.isEmpty())  // 1 eile
         { // {
                 System.out.println();
-                System.out.println("New VIP client added to the first queue: " + client.toString());
+                System.out.println("New VIP client added to the first queue: " + client);
                 eile.addFirst(client);
                 lastVip++;
         }
         else if (eile.size() < 10 && !SecondQueue) // 1 eile
         {
             System.out.println();
-            System.out.println("New standard client added to the first queue: " + client.toString());
+            System.out.println("New standard client added to the first queue: " + client);
             eile.addLast(client);
         }
         else if (eile.size() == 10 & lastVip>0 && SecondQueue) {  // 2 eile
@@ -62,25 +62,27 @@ public class Simulation {
             if (CheckVip(client) && eile2.size() < 10)
             {
                 System.out.println();
-                System.out.println("New VIP client added to the second queue: " + client.toString());
+                System.out.println("New VIP client added to the second queue: " + client);
                     eile2.addFirst(client);
                     lastVip2++;
             }
             else
             {
                 System.out.println();
-                System.out.println("New standard client added to the second queue: " + client.toString());
+                System.out.println("New standard client added to the second queue: " + client);
                 eile2.addLast(client);
             }
     x++;
     }
-    void serve() throws IOException {
+    void serve() {
 
         if (!eile.isEmpty()) {
             System.out.println("Servicing the first queue");
             Info callerInfo = eile.peekFirst();
             String comment = getCommentFromUser(callerInfo);
-            callerInfo.setComment(comment);
+            if (callerInfo != null) {
+                callerInfo.setComment(comment);
+            }
             servedCallers.add(callerInfo);
             eile.removeFirst();
 
@@ -90,7 +92,9 @@ public class Simulation {
             System.out.println("Servicing the second Queue");
             Info callerInfo = eile2.peekFirst();
             String comment = getCommentFromUser(callerInfo);
-            callerInfo.setComment(comment);
+            if (callerInfo != null) {
+                callerInfo.setComment(comment);
+            }
             servedCallers.add(callerInfo);
             eile2.removeFirst();
 
@@ -102,7 +106,7 @@ public class Simulation {
         try {
             objectMapper.writeValue(jsonFile, servedCallers);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
    }
 
